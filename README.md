@@ -6,8 +6,6 @@
 [![Font Awesome](https://img.shields.io/badge/icons-Font%20Awesome-528DD7?logo=fontawesome&logoColor=fff)](https://fontawesome.com/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Majestic Cabinets is a responsive, multi-page brochure website for a Las Vegas cabinet company. It gives homeowners a clear way to explore cabinet services, review completed work, read renovation articles, and request a consultation or contact the business.
-
 ## Contents
 
 - [Pages](#pages)
@@ -18,8 +16,17 @@ Majestic Cabinets is a responsive, multi-page brochure website for a Las Vegas c
   - [Articles](#articles)
   - [Article Details](#article-details)
   - [Contact](#contact)
+- [Shared Stylesheet and Assets](#shared-stylesheet-and-assets)
 - [Key Features](#key-features)
 - [Tech Stack](#tech-stack)
+- [Tools Setup](#tools-setup)
+  - [Code Editor](#code-editor)
+  - [Git](#git)
+  - [Browser and Developer Tools](#browser-and-developer-tools)
+  - [Python Static Server](#python-static-server)
+  - [External Font and Icon Tools](#external-font-and-icon-tools)
+  - [Image Asset Workflow](#image-asset-workflow)
+  - [Optional Django Tools](#optional-django-tools)
 - [Getting Started](#getting-started)
 - [Environment Variables](#environment-variables)
 - [Django Template Setup](#django-template-setup)
@@ -28,6 +35,8 @@ Majestic Cabinets is a responsive, multi-page brochure website for a Las Vegas c
 - [Usage](#usage)
 - [License](#license)
 - [Back to Contact](#back-to-contact)
+
+Majestic Cabinets is a responsive, multi-page brochure website for a Las Vegas cabinet company. It gives homeowners a clear way to explore cabinet services, review completed work, read renovation articles, and request a consultation or contact the business.
 
 ## Pages
 
@@ -40,6 +49,100 @@ Majestic Cabinets is a responsive, multi-page brochure website for a Las Vegas c
 | Articles        | [`articles.html`](articles.html)               | Lists cabinet-related articles and categories.                                    |
 | Article Details | [`articlesDetails.html`](articlesDetails.html) | Shows the cabinet-refacing article detail view.                                   |
 | Contact         | [`contact.html`](contact.html)                 | Provides the consultation form, business details, and map embed.                  |
+
+### Home
+
+[`index.html`](index.html) is the primary landing page. It combines the main promotion, company introduction, service highlights, portfolio preview, reasons to choose the company, recent article previews, email subscription form, and footer contact details.
+
+```html
+<h1>
+  Refinish Your Cabinets <br />
+  Save Up To 60%
+</h1>
+<p>Call us today for your FREE design consultation</p>
+<a href="contact.html">Request a quote</a>
+```
+
+### About
+
+[`about.html`](about.html) explains the company history, quality promise, design and innovation functions, team members, and contractor licensing information. It is intended for visitors who need more trust and company background before requesting a quote.
+
+```html
+<h1>About us</h1>
+<p>HOME / ABOUT</p>
+<h2>Welcome to <span>Majestic Cabinets</span></h2>
+```
+
+### Services
+
+[`services.html`](services.html) presents the three core cabinet services: refinishing, refacing, and custom-built cabinetry. Each service uses an image from `images/` and a descriptive paragraph so visitors can compare the available options.
+
+```html
+<article class="service">
+  <img src="images/ourServices1.webp" alt="Cabinet refinishing" />
+  <h4>Refinishing</h4>
+  <p>Refresh existing cabinets without replacing the full kitchen.</p>
+</article>
+```
+
+### Portfolio
+
+[`portfolio.html`](portfolio.html) displays the project gallery with sixteen portfolio images and category labels for viewing all, cabinet, refinishing, and custom work. The current category controls are presentational links and do not filter the gallery without additional JavaScript or backend logic.
+
+```html
+<div class="menu">
+  <a class="active" href="#">view all</a>
+  <a href="#">cabinets</a>
+  <a href="#">refinish cabinets</a>
+  <a href="#">custom</a>
+</div>
+```
+
+### Articles
+
+[`articles.html`](articles.html) is the article index. It contains cabinet-related posts, dates, authors, summaries, read-more controls, and a category list. The current article links and read-more buttons are placeholders until article routing is connected.
+
+```html
+<article class="article_list">
+  <h3><a href="articlesDetails.html">Cabinet Refacing in Las Vegas</a></h3>
+  <p class="post_time">Dec, 24th 2018 | Posted By <span>admin</span></p>
+  <button type="button">Read More</button>
+</article>
+```
+
+### Article Details
+
+[`articlesDetails.html`](articlesDetails.html) provides the full cabinet-refacing article view. It includes the article metadata, two supporting images, detailed copy, and the same article category sidebar used on the index page.
+
+```html
+<p class="post_time">Dec, 24th 2018 | Posted By <span>admin</span></p>
+<p class="post_article">
+  Refacing the cabinets of your Las Vegas kitchen is easy with Majestic
+  Cabinets!
+</p>
+```
+
+### Contact
+
+[`contact.html`](contact.html) is the conversion page. It contains the consultation form, physical address, phone and fax details, website information, and an embedded Google Map. The form currently has no `action` endpoint, so it requires a backend or form provider before it can deliver submissions.
+
+```html
+<form action="/contact/" method="post">
+  <input type="text" name="name" placeholder="Name" required />
+  <input type="email" name="email" placeholder="Email" required />
+  <textarea name="message" placeholder="Message" required></textarea>
+  <input class="button" type="submit" value="Send Message" />
+</form>
+```
+
+### Shared stylesheet and assets
+
+[`style.css`](style.css) contains the shared layout and page-specific rules. Images are stored in [`images/`](images/) and referenced with relative paths from each HTML page.
+
+```html
+<link rel="stylesheet" href="style.css" />
+<img src="images/logo.webp" alt="Majestic Cabinets logo" />
+```
 
 ## Key Features
 
@@ -58,6 +161,95 @@ Majestic Cabinets is a responsive, multi-page brochure website for a Las Vegas c
 - Google Fonts: Open Sans, Oswald, Raleway, and Roboto
 - Font Awesome 6.7.1 via CDN for interface icons
 - Optional Django integration documented below; Django is not currently included in this repository
+
+## Tools Setup
+
+### Code editor
+
+VS Code is recommended for editing HTML, CSS, and Markdown. Open the repository folder as a workspace so relative links and the `images/` directory are easy to inspect.
+
+```bash
+code Majestic-Cabinet
+```
+
+Useful extensions are optional: an HTML language-support extension, a CSS language-support extension, and a Markdown preview extension. The project does not require an extension to run.
+
+### Git
+
+Git is used to download and version the project. Verify the installation before cloning:
+
+```bash
+git --version
+git clone <repository-url>
+cd Majestic-Cabinet
+git status
+```
+
+### Browser and developer tools
+
+Use Chrome, Edge, Firefox, or another modern browser to inspect the pages. Browser developer tools are useful for checking responsive breakpoints, missing images, invalid markup, and console errors.
+
+```text
+Open a page in the browser
+Right-click -> Inspect
+Check Console for errors
+Check Network for 404 asset requests
+Toggle device emulation for mobile layouts
+```
+
+### Python static server
+
+Python is optional, but its built-in HTTP server prevents common local path and asset issues that can occur when opening HTML files directly.
+
+```bash
+python --version
+python -m http.server 8000
+```
+
+Stop the server with `Ctrl+C`. If port `8000` is busy, use another port:
+
+```bash
+python -m http.server 8080
+```
+
+### External font and icon tools
+
+The pages load Google Fonts and Font Awesome from CDNs. An internet connection is required for those fonts and icons to appear. The HTML includes the Font Awesome stylesheet with an integrity value for safer loading.
+
+```html
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
+/>
+<i class="fa-solid fa-phone" aria-hidden="true"></i>
+```
+
+For an offline deployment, download and self-host approved font and icon assets, then replace the CDN links with local files.
+
+### Image asset workflow
+
+Keep image filenames stable because every page references them directly. Use WebP images where possible, provide meaningful `alt` text, and confirm every referenced file exists before deployment.
+
+```text
+images/
+├── logo.webp
+├── footer_logo.webp
+├── portfolio1.webp ... portfolio16.webp
+├── ourServices1.webp ... ourServices3.webp
+└── articleDetails_img1.webp, articleDetails_img2.webp
+```
+
+### Optional Django tools
+
+Django is only needed for server-side URL names, reusable templates, database-backed content, and working form submissions. It is not required for the current repository.
+
+```bash
+python -m venv .venv
+\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install django
+python -m django --version
+```
 
 ## Getting Started
 
