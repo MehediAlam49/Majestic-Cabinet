@@ -1,3 +1,5 @@
+Use the navigation links to move between the static pages. A code editor extension with a live preview is optional, and no additional runtime server is required.
+
 # Majestic Cabinets
 
 [![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=fff)](https://developer.mozilla.org/en-US/docs/Web/HTML)
@@ -23,15 +25,9 @@
   - [Code Editor](#code-editor)
   - [Git](#git)
   - [Browser and Developer Tools](#browser-and-developer-tools)
-  - [Python Static Server](#python-static-server)
   - [External Font and Icon Tools](#external-font-and-icon-tools)
   - [Image Asset Workflow](#image-asset-workflow)
-  - [Optional Django Tools](#optional-django-tools)
 - [Getting Started](#getting-started)
-- [Environment Variables](#environment-variables)
-- [Django Template Setup](#django-template-setup)
-- [Context Data](#context-data)
-- [Navigation Page](#navigation-page)
 - [Usage](#usage)
 - [License](#license)
 - [Back to Contact](#back-to-contact)
@@ -87,7 +83,7 @@ Majestic Cabinets is a responsive, multi-page brochure website for a Las Vegas c
 
 ### Portfolio
 
-[`portfolio.html`](portfolio.html) displays the project gallery with sixteen portfolio images and category labels for viewing all, cabinet, refinishing, and custom work. The current category controls are presentational links and do not filter the gallery without additional JavaScript or backend logic.
+[`portfolio.html`](portfolio.html) displays the project gallery with sixteen portfolio images and category labels for viewing all, cabinet, refinishing, and custom work. The current category controls are presentational links and do not filter the gallery.
 
 ```html
 <div class="menu">
@@ -124,7 +120,7 @@ Majestic Cabinets is a responsive, multi-page brochure website for a Las Vegas c
 
 ### Contact
 
-[`contact.html`](contact.html) is the conversion page. It contains the consultation form, physical address, phone and fax details, website information, and an embedded Google Map. The form currently has no `action` endpoint, so it requires a backend or form provider before it can deliver submissions.
+[`contact.html`](contact.html) is the conversion page. It contains the consultation form, physical address, phone and fax details, website information, and an embedded Google Map. The form is currently visual only and does not send or store submissions.
 
 ```html
 <form action="/contact/" method="post">
@@ -157,10 +153,6 @@ Majestic Cabinets is a responsive, multi-page brochure website for a Las Vegas c
 
 - HTML5 for page structure and content
 - CSS3 in [`style.css`](style.css) for layout, typography, responsive behavior, and visual styling
-- WebP image assets in [`images/`](images/)
-- Google Fonts: Open Sans, Oswald, Raleway, and Roboto
-- Font Awesome 6.7.1 via CDN for interface icons
-- Optional Django integration documented below; Django is not currently included in this repository
 
 ## Tools Setup
 
@@ -197,21 +189,6 @@ Check Network for 404 asset requests
 Toggle device emulation for mobile layouts
 ```
 
-### Python static server
-
-Python is optional, but its built-in HTTP server prevents common local path and asset issues that can occur when opening HTML files directly.
-
-```bash
-python --version
-python -m http.server 8000
-```
-
-Stop the server with `Ctrl+C`. If port `8000` is busy, use another port:
-
-```bash
-python -m http.server 8080
-```
-
 ### External font and icon tools
 
 The pages load Google Fonts and Font Awesome from CDNs. An internet connection is required for those fonts and icons to appear. The HTML includes the Font Awesome stylesheet with an integrity value for safer loading.
@@ -239,24 +216,11 @@ images/
 └── articleDetails_img1.webp, articleDetails_img2.webp
 ```
 
-### Optional Django tools
-
-Django is only needed for server-side URL names, reusable templates, database-backed content, and working form submissions. It is not required for the current repository.
-
-```bash
-python -m venv .venv
-\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-python -m pip install django
-python -m django --version
-```
-
 ## Getting Started
 
 ### Prerequisites
 
 - A modern web browser
-- Optional: Python 3 for a local static HTTP server
 - Optional: Git for cloning the repository
 
 ### Installation
@@ -272,193 +236,7 @@ No package installation or build step is required for the current static impleme
 
 ### Run locally
 
-For the most reliable local behavior, serve the directory over HTTP:
-
-```bash
-python -m http.server 8000
-```
-
-Open [http://localhost:8000](http://localhost:8000) in a browser. You can also open [`index.html`](index.html) directly, although a local server is recommended for consistent asset and navigation behavior.
-
-## Environment Variables
-
-The current static site does not require environment variables. The forms and Google Map are front-end markup only; they do not currently submit data to a backend.
-
-If the site is connected to a Django backend, a production deployment should keep secrets in environment variables, for example:
-
-```env
-DJANGO_SECRET_KEY=replace-with-a-secure-secret
-DJANGO_DEBUG=False
-DJANGO_ALLOWED_HOSTS=example.com,www.example.com
-```
-
-## Django Template Setup
-
-The HTML files can be migrated into Django templates when server-side routing, reusable context, and form processing are needed. The following example assumes a Django project named `config` and an app named `website`.
-
-### 1. Install and create the project
-
-```bash
-python -m venv .venv
-
-# Windows PowerShell
-.\.venv\Scripts\Activate.ps1
-
-pip install django
-django-admin startproject config .
-python manage.py startapp website
-python manage.py migrate
-python manage.py runserver
-```
-
-### 2. Configure templates and static files
-
-Move the HTML files to `website/templates/website/` and the CSS/images to `website/static/website/`. Add the app in `config/settings.py`:
-
-```python
-INSTALLED_APPS = [
-	# ...
-	"website",
-]
-
-STATIC_URL = "static/"
-```
-
-At the top of each converted template, load static assets:
-
-```django
-{% load static %}
-<link rel="stylesheet" href="{% static 'website/style.css' %}">
-<img src="{% static 'website/images/logo.webp' %}" alt="Majestic Cabinets logo">
-```
-
-### 3. Add a template view
-
-Create `website/views.py`:
-
-```python
-from django.shortcuts import render
-
-
-def home(request):
-	context = {
-		"page_title": "Majestic Cabinets",
-		"featured_services": [
-			"Refinishing",
-			"Refacing",
-			"Custom Built",
-		],
-	}
-	return render(request, "website/index.html", context)
-```
-
-### 4. Add named URL patterns
-
-Create `website/urls.py`:
-
-```python
-from django.urls import path
-
-from . import views
-
-app_name = "website"
-
-urlpatterns = [
-	path("", views.home, name="home"),
-]
-```
-
-Include the app URLs in `config/urls.py`:
-
-```python
-from django.contrib import admin
-from django.urls import include, path
-
-urlpatterns = [
-	path("admin/", admin.site.urls),
-	path("", include("website.urls")),
-]
-```
-
-## Context Data
-
-Pass page content from views instead of hard-coding repeated values in every template:
-
-```python
-def services(request):
-	context = {
-		"page_title": "Services",
-		"services": [
-			{
-				"name": "Refinishing",
-				"image": "website/images/ourServices1.webp",
-				"summary": "Refresh existing cabinets without replacing the full kitchen.",
-			},
-			{
-				"name": "Refacing",
-				"image": "website/images/ourServices2.webp",
-				"summary": "Update doors, drawer fronts, and hardware while keeping the layout.",
-			},
-			{
-				"name": "Custom Built",
-				"image": "website/images/ourServices3.webp",
-				"summary": "Create cabinetry designed around the room and the homeowner's needs.",
-			},
-		],
-	}
-	return render(request, "website/services.html", context)
-```
-
-Render the context in `website/templates/website/services.html`:
-
-```django
-{% extends "website/base.html" %}
-{% load static %}
-
-{% block content %}
-<h1>{{ page_title }}</h1>
-<div class="services-grid">
-  {% for service in services %}
-	<article>
-	  <img src="{% static service.image %}" alt="{{ service.name }}">
-	  <h2>{{ service.name }}</h2>
-	  <p>{{ service.summary }}</p>
-	</article>
-  {% empty %}
-	<p>No services are available.</p>
-  {% endfor %}
-</div>
-{% endblock %}
-```
-
-## Navigation Page
-
-Use Django URL names instead of hard-coded `.html` paths. This keeps navigation working when URL patterns change:
-
-```django
-<nav aria-label="Primary navigation">
-  <a href="{% url 'website:home' %}">Home</a>
-  <a href="{% url 'website:about' %}">About</a>
-  <a href="{% url 'website:services' %}">Services</a>
-  <a href="{% url 'website:portfolio' %}">Portfolio</a>
-  <a href="{% url 'website:articles' %}">Articles</a>
-  <a href="{% url 'website:contact' %}">Contact</a>
-</nav>
-```
-
-The matching named routes can be defined as follows:
-
-```python
-urlpatterns = [
-	path("", views.home, name="home"),
-	path("about/", views.about, name="about"),
-	path("services/", views.services, name="services"),
-	path("portfolio/", views.portfolio, name="portfolio"),
-	path("articles/", views.articles, name="articles"),
-	path("articles/<slug:slug>/", views.article_detail, name="article-detail"),
-	path("contact/", views.contact, name="contact"),
-]
-```
+Open [`index.html`](index.html) in a modern browser. Use the navigation links to move between the static pages. A code editor extension with a live preview is optional, and no additional runtime server is required.
 
 ## Usage
 
@@ -474,7 +252,7 @@ Article detail: /articlesDetails.html
 Contact:        /contact.html
 ```
 
-Use the primary pages to review services and project images. Use the Contact page to view business information, the map, and the consultation form. In the current static version, form submission is not connected to email or database storage.
+Use the primary pages to review services and project images. Use the Contact page to view business information, the map, and the consultation form. The current form is front-end markup only and does not process submissions.
 
 ### Contact link
 
@@ -482,12 +260,6 @@ Use this link from any static page to return visitors to the contact page:
 
 ```html
 <a href="contact.html">Request a consultation</a>
-```
-
-For the Django version, use the named route:
-
-```django
-<a href="{% url 'website:contact' %}">Request a consultation</a>
 ```
 
 ## License
