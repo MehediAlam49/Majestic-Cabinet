@@ -1,5 +1,3 @@
-Use the navigation links to move between the static pages. A code editor extension with a live preview is optional, and no additional runtime server is required.
-
 # Majestic Cabinets
 
 [![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=fff)](https://developer.mozilla.org/en-US/docs/Web/HTML)
@@ -18,6 +16,7 @@ Use the navigation links to move between the static pages. A code editor extensi
   - [Articles](#articles)
   - [Article Details](#article-details)
   - [Contact](#contact)
+  - [Test Page](#test-page)
 - [Shared Stylesheet and Assets](#shared-stylesheet-and-assets)
 - [Key Features](#key-features)
 - [Tech Stack](#tech-stack)
@@ -45,6 +44,7 @@ Majestic Cabinets is a responsive, multi-page brochure website for a Las Vegas c
 | Articles        | [`articles.html`](articles.html)               | Lists cabinet-related articles and categories.                                    |
 | Article Details | [`articlesDetails.html`](articlesDetails.html) | Shows the cabinet-refacing article detail view.                                   |
 | Contact         | [`contact.html`](contact.html)                 | Provides the consultation form, business details, and map embed.                  |
+| Test Page       | [`test.html`](test.html)                       | Provides a standalone page for checking markup and styling changes.               |
 
 ### Home
 
@@ -131,6 +131,26 @@ Majestic Cabinets is a responsive, multi-page brochure website for a Las Vegas c
 </form>
 ```
 
+### Test Page
+
+[`test.html`](test.html) is a standalone testing page. Use it to preview isolated HTML or CSS changes before applying them to the customer-facing pages. Keep experimental markup here clearly separated from production content.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Majestic Cabinets Test Page</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>Component test</h1>
+    </main>
+  </body>
+</html>
+```
+
 ### Shared stylesheet and assets
 
 [`style.css`](style.css) contains the shared layout and page-specific rules. Images are stored in [`images/`](images/) and referenced with relative paths from each HTML page.
@@ -156,6 +176,25 @@ Majestic Cabinets is a responsive, multi-page brochure website for a Las Vegas c
 
 ## Tools Setup
 
+### Repository structure
+
+The project is intentionally small and has no package manager or build directory. Keep page files at the repository root so their relative stylesheet, navigation, and image paths continue to work.
+
+```text
+Majestic-Cabinet/
+├── index.html
+├── about.html
+├── services.html
+├── portfolio.html
+├── articles.html
+├── articlesDetails.html
+├── contact.html
+├── test.html
+├── style.css
+├── images/
+└── README.md
+```
+
 ### Code editor
 
 VS Code is recommended for editing HTML, CSS, and Markdown. Open the repository folder as a workspace so relative links and the `images/` directory are easy to inspect.
@@ -165,6 +204,12 @@ code Majestic-Cabinet
 ```
 
 Useful extensions are optional: an HTML language-support extension, a CSS language-support extension, and a Markdown preview extension. The project does not require an extension to run.
+
+To preview the README inside VS Code, open it and use the Markdown preview command:
+
+```text
+Ctrl+Shift+V
+```
 
 ### Git
 
@@ -188,6 +233,8 @@ Check Console for errors
 Check Network for 404 asset requests
 Toggle device emulation for mobile layouts
 ```
+
+After changing a page, check the browser at both a desktop and mobile width. Confirm that the shared header, images, footer, text, and links remain visible and usable.
 
 ### External font and icon tools
 
@@ -215,6 +262,17 @@ images/
 ├── ourServices1.webp ... ourServices3.webp
 └── articleDetails_img1.webp, articleDetails_img2.webp
 ```
+
+When adding an image, update the HTML path and alternative text together:
+
+```html
+<img
+  src="images/new-cabinet-project.webp"
+  alt="White custom kitchen cabinets"
+/>
+```
+
+Before publishing, search for missing files and confirm that image names match their references exactly, including capitalization.
 
 ## Getting Started
 
